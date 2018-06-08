@@ -37,7 +37,7 @@ export function toggleObserving (value: boolean) {
 export class Observer {
   value: any;
   dep: Dep;
-  vmCount: number; // number of vms that has this object as root $data
+  vmCount: number; // number of vms that has this object as root $data 
 
   constructor (value: any) {
     this.value = value
