@@ -131,6 +131,16 @@ export function lifecycleMixin (Vue: Class<Component>) {
   }
 }
 
+/**
+ * 
+ * @param {*} vm 
+ * @param {*} el 
+ * @param {*} hydrating 
+ * 
+ * 主要是先调用vm._render方法生成了一个vnode，
+ * 然后实例化一个Watcher，把updateComponent函数当作回调传进去，updateComponent会执行vm的_update方法更新组件
+ * Watcher初始化的时候会执行回调函数，另一个是当 vm 实例中的监测的数据发生变化的时候执行回调函数
+ */
 export function mountComponent (
   vm: Component,
   el: ?Element,
@@ -189,6 +199,7 @@ export function mountComponent (
   // component's mounted hook), which relies on vm._watcher being already defined
   new Watcher(vm, updateComponent, noop, {
     before () {
+      //如果已经挂载了，那说明组件被更新，执行beforeUpdate的钩子
       if (vm._isMounted) {
         callHook(vm, 'beforeUpdate')
       }
@@ -198,6 +209,7 @@ export function mountComponent (
 
   // manually mounted instance, call mounted on self
   // mounted is called for render-created child components in its inserted hook
+  //vm.$vnode 表示 Vue 实例的父虚拟 Node,如果是 null 就是表示当前是根Vue的实例
   if (vm.$vnode == null) {
     vm._isMounted = true
     callHook(vm, 'mounted')

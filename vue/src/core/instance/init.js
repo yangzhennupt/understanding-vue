@@ -14,7 +14,11 @@ import { extend, mergeOptions, formatComponentName } from '../util/index'
  * 每一个vm都有一个uid，自增的
  */
 let uid = 0
-
+/**
+ * 
+ * @param {*} Vue
+ * _init方法主要做的就是合并配置，初始化生命周期、事件中心、渲染、 data、props
+ */
 export function initMixin (Vue: Class<Component>) {
   Vue.prototype._init = function (options?: Object) {
     const vm: Component = this
@@ -67,7 +71,7 @@ export function initMixin (Vue: Class<Component>) {
       mark(endTag)
       measure(`vue ${vm._name} init`, startTag, endTag)
     }
-
+     //如果$option里面有el属性执行挂载方法。挂载的方式跟平台相关，web端是在platforms/web/entry-runtime-with-compiler.js里面定义的
     if (vm.$options.el) {
       vm.$mount(vm.$options.el)
     }

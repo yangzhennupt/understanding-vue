@@ -14,6 +14,11 @@ const idToTemplate = cached(id => {
   return el && el.innerHTML
 })
 
+/**
+ * 缓存原型上的$mount 然后重新定义 原先原型上的 $mount 方法在 src/platform/web/runtime/index.js 中定义，
+ * 之所以这么设计完全是为了可以被 runtime only 版本的 Vue 直接使用的。
+ */
+
 const mount = Vue.prototype.$mount
 Vue.prototype.$mount = function (
   el?: string | Element,
@@ -31,6 +36,7 @@ Vue.prototype.$mount = function (
 
   const options = this.$options
   // resolve template/el and convert to render function
+  //判断是否有render函数，如果没有就去template解析成render函数
   if (!options.render) {
     let template = options.template
     if (template) {
@@ -78,6 +84,7 @@ Vue.prototype.$mount = function (
       }
     }
   }
+  //最后调用原来原型上的mount方法来挂载
   return mount.call(this, el, hydrating)
 }
 
